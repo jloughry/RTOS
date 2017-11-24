@@ -15,6 +15,25 @@ RTOS; this is mine.
 
 For more information, contact [Joe Loughry](mailto:joe.loughry@gmail.com).
 
+## How to Build:
+
+`make`
+
+You'll need an assembler for the ARM architecture; install the [GNU Embedded
+Toolchain for
+ARM](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads);
+there are Windows, Linux, and Mac OS X versions. As long as you can run the
+assembler as `arm-none-eabi-as` then you're good.
+
+Once you've got the actual `kernel.img` file, copy it to the root of a
+Linux-formatted micro-SD card that already has the Raspbian OS on it, or
+renamed `recovery.img` on the root of a FAT-formatted micro-SD card. Either
+way, it'll boot when the Raspberry Pi is next powered on.
+
+The only way to know this kernel is running is to watch an LED conneced to
+GPIO pin BCM 16 on J8 through a small resistor to ground. The LED will
+flash at a rate of 1 Hz.
+
 ## Technical Notes:
 
 The base address for the Raspberry Pi 3b is 0x3F000000, changed from
@@ -26,4 +45,9 @@ other various ways of numbering Raspberry Pi GPIO pins on the J8 header.
 For testing, connect an LED through a resistor of approximately 100 to 400
 ohms between the GPIO pin and a ground pin (if the LED doesn't light up,
 turn it around).
+
+There's no real scheduler yet, just round robin, and only one task; it uses
+a busy-wait for timing. But the hard part was getting anything at all to boot
+on the Raspberry Pi 3 hardware; after that, the rest (interrupts, timing,
+priority scheduler, I/O) is, in comparison, easy.
 
